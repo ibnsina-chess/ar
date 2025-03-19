@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التصنيف - فرسان الظلام ابن سينا</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="https://i.ibb.co/1nxPTWV/the-dark-knights-ibns-sina-chess-club-logo-1.png" type="image/x-icon">
+    
+    <style>
+        /* تنسيق أساسي للصفحة */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: #000;
+            background-color: #fff;
+        }
+        /* تنسيق الجدول */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 2px solid #000;
+        }
+        th, td {
+            padding: 10px;
+            text-align: right;
+            border: 1px solid #000;
+        }
+        th {
+            background-color: #000;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #fff;
+        }
+        tr:hover {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        /* حاوية الجداول */
+        #tablesContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-bottom: 50px;
+        }
+        /* تنسيق المراكز المختلفة */
+        .F {
+            color: gold; /* لون ذهبي للمركز الأول */
+            font-size: 20px;
+        }
+        .S {
+            color: silver; /* لون فضي للمركز الثاني */
+            font-size: 17px;
+        }
+        .T {
+            color: #cd7f32; /* لون برونزي للمركز الثالث */
+            font-size: 16px;
+        }
+        /* تنسيق أيقونات font-awesome */
+        .fa-caret-up {
+            color: green;
+        }
+        .fa-caret-down {
+            color: red;
+        }
+        .gold {
+            background-color: rgb(251, 249, 241);
+        }
+     
+        @media screen {
+            th, td {
+            padding: 3px;
+            text-align: right;
+            border: 1px solid #000;
+        }
+            
+        @media screen and (max-width: 410px) {
+            th, td {
+                padding: 3px;
+                text-align: right;
+                border: 1px solid #000;
+                font-size: 12px;
+            }
+        }
+}
+
+       
+    </style>
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <nav>
+        <img src="https://i.ibb.co/Vwt7cPq/the-dark-knights-ibns-sina-chess-club-logo-1.png" alt="" class="logo">
+
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul>
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="members.html">الأعضاء</a></li>
+            <li><a href="classification.html">التصنيف</a></li>
+            <li><a href="evolution.html">التطور</a></li>
+            <li><a href="puzzles.html">الألغاز</a></li>
+    
+        </ul>
+    </nav>
+    <h1 id="lastUpdate">تصنيف الشطرنج</h1>
+    <p class="loading" id="progressLbl">جاري تحميل البيانات...</p>
+    <div id="tablesContainer"></div>
+
+    <footer>
+        <div class="horizontal-div">
+             <img src="https://i.ibb.co/xr0mz7L/buil-by.png" alt="">
+            
+             <a href="https://github.com/abdelhakim-sahifa"> <i class="fa-brands fa-github"></i></a>
+        </div>
+ 
+ 
+           <ul class="footer-links">
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="members.html">الأعضاء</a></li>
+            <li><a href="classification.html">التصنيف</a></li>
+            <li><a href="evolution.html">التطور</a></li>
+            <li><a href="puzzles.html">الألغاز</a></li>
+         </ul>
+         <p>&copy; 2024 فرسان الظلام ابن سينا. جميع الحقوق محفوظة.</p>
+ 
+             
+    </footer>
+ 
+    <script>
+        // دالة لتبديل القائمة
+        function toggleMenu() {
+            const navLinks = document.querySelector("nav ul");
+            navLinks.classList.toggle("show");
+        }
+    </script>
+
+   <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-database.js";
+
+// تكوين Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyCd9XbhKz-AYvVJtLCi2hVDBvyYsSGB89w",
+    authDomain: "chess-3596b.firebaseapp.com",
+    databaseURL: "https://chess-3596b-default-rtdb.firebaseio.com",
+    projectId: "chess-3596b",
+    storageBucket: "chess-3596b.appspot.com",
+    messagingSenderId: "628293480183",
+    appId: "1:628293480183:web:ecd5f317c728cd1233edf2",
+    measurementId: "G-11H7GE4LT7"
+};
+
+// تهيئة Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+const memberRef = ref(database, 'members/');
+const translationsRef = ref(database, 'translations/');
+const tablesContainer = document.getElementById('tablesContainer');
+const loadingText = document.getElementById('progressLbl');
+
+const chessCategories = [
+    { id: "chess_daily", title: "المباريات اليومية المُلعبة" , progress: "25%"},
+    { id: "chess_rapid", title: "المباريات السريعة المُلعبة" , progress: "50%" },
+    { id: "chess_bullet", title: "مباريات البوليت المُلعبة" , progress: "75%" },
+    { id: "chess_blitz", title: "مباريات البليتز المُلعبة"  , progress: "100%"},
+];
+
+// تسجيل التصنيفات السابقة من localStorage
+console.log("التصنيفات السابقة:");
+chessCategories.forEach(category => {
+    const storedRankings = localStorage.getItem(`${category.id}_rankingsG`);
+    if (storedRankings) {
+        console.log(`${category.title}:`, JSON.parse(storedRankings));
+    } else {
+        console.log(`${category.title}: لم يتم العثور على تصنيفات سابقة.`);
+    }
+});
+
+// أولاً، جلب بيانات الترجمات
+onValue(translationsRef, (translationSnapshot) => {
+    const translationsData = translationSnapshot.val() || {};
+    
+    // جلب بيانات الأعضاء من Firebase
+    onValue(memberRef, async (snapshot) => {
+        if (tablesContainer) {
+            tablesContainer.innerHTML = "";
+            
+            const members = snapshot.val();
+            const memberKeys = Object.keys(members);
+            const categoryDataMap = {};
+            
+            // إنشاء جداول لكل فئة
+            chessCategories.forEach(category => {
+                categoryDataMap[category.id] = [];
+                const table = document.createElement('table');
+                table.id = `${category.id}Table`;
+                table.style.display = "none";
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>الاسم</th>
+                            <th>${category.title}</th>
+                            <th>الكفاءة</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                `;
+                tablesContainer.appendChild(table);
+            });
+            
+            var counter = 1;
+            // جلب البيانات لكل عضو
+            for (const key of memberKeys) {
+                const memberRef = ref(database, `members/${key}`);
+                await new Promise((resolve) => {
+                    onValue(memberRef, async (snapshot) => {
+                        var prog = counter / memberKeys.length * 100;
+                        if (loadingText) {
+                            loadingText.innerHTML = `جاري تحميل البيانات...${prog.toFixed(2)}%`;
+                        }
+                        counter = counter + 1;
+                        
+                        const memberData = snapshot.val();
+                        const username = memberData.username;
+                        
+                        if (username && username !== "none") {
+                            try {
+                                const response = await fetch(`https://api.chess.com/pub/player/${username}/stats`);
+                                if (response.ok) {
+                                    const data = await response.json();
+                                    
+                                    // تحديد الاسم العربي إذا كان متوفراً
+                                    const memberId = makeID(memberData.name, memberData.id);
+                                    let displayName = memberData.name;
+                                    
+                                    // استخدام الاسم العربي إذا كان متوفراً في بيانات الترجمة
+                                    if (translationsData[memberId] && translationsData[memberId].arabicName) {
+                                        displayName = translationsData[memberId].arabicName;
+                                    }
+                                    
+                                    chessCategories.forEach(category => {
+                                        const categoryData = data[category.id]?.record || data[category.id]?.highest || null;
+                                        if (categoryData) {
+                                            categoryDataMap[category.id].push({
+                                                name: displayName,
+                                                gamesPlayed: `الإجمالي: ${categoryData.win + categoryData.draw + categoryData.loss} ف:${categoryData.win}/خ:${categoryData.loss}/ت:${categoryData.draw}`,
+                                                rating: categoryData.win + categoryData.draw + categoryData.loss || 0,
+                                                gameRating: data[category.id]?.last.rating || 0,
+                                                win: categoryData.win,
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    console.warn(`استجابة Chess.com API غير صحيحة للمستخدم: ${username}`);
+                                }
+                            } catch (error) {
+                                console.error(`فشل في جلب إحصائيات المستخدم: ${username}`, error);
+                            }
+                        }
+                        resolve();
+                    }, { onlyOnce: true });
+                });
+            }
+            
+            // ترتيب وعرض كل فئة
+            chessCategories.forEach(category => {
+                const data = categoryDataMap[category.id];
+                const previousRankings = JSON.parse(localStorage.getItem(`${category.id}_rankingsG`) || '[]');
+                if (data.length > 0) {
+                    data.sort((a, b) => b.rating - a.rating); // ترتيب تنازلي حسب التصنيف
+                    
+                    // تخزين التصنيفات محليًا في المتصفح
+                    localStorage.setItem(`${category.id}_rankingsG`, JSON.stringify(data));
+                    
+                    const table = document.getElementById(`${category.id}Table`);
+                    if (table) {
+                        const tbody = table.querySelector('tbody');
+                        
+                        data.forEach((player, index) => {
+                            const rank = index + 1;
+                            const rankLabel = rank === 1 ? "الأول" : rank === 2 ? "الثاني" : rank === 3 ? "الثالث" : `${rank}`;
+                            let icon = '<i class="fa-solid fa-minus"></i>'; // الافتراضي: لا تغيير
+                            
+                            // المقارنة مع التصنيف السابق
+                            const previousPlayer = previousRankings.find(p => p.name === player.name);
+                            if (previousPlayer) {
+                                const previousRank = previousRankings.indexOf(previousPlayer) + 1;
+                                if (rank > previousRank) {
+                                    icon = '<i class="fa fa-caret-down"></i>'; // انخفض التصنيف
+                                } else if (rank < previousRank) {
+                                    icon = '<i class="fa fa-caret-up"></i>'; // ارتفع التصنيف
+                                }
+                            }
+                            
+                            const row = document.createElement('tr');
+                            var efficiency = player.win / player.rating * 100;
+                            
+                            // تطبيق أنماط مختلفة للمراكز الثلاثة الأولى
+                            if (rank === 1) {
+                                row.innerHTML = `
+                                    <td class='gold'>${rankLabel} ${icon}<i class="fas fa-medal golden-medal F"></i><br>${player.name}</td>
+                                    <td class='gold'>${player.gamesPlayed}</td>
+                                    <td>${efficiency.toFixed(2)}%</td>
+                                `;
+                            } else if (rank == 2) {
+                                row.innerHTML = `
+                                    <td class='silver'>${rankLabel} ${icon} <i class="fas fa-medal golden-medal S"></i><br>${player.name}</td>
+                                    <td class='silver'>${player.gamesPlayed}</td>
+                                    <td>${efficiency.toFixed(2)}%</td>
+                                `;
+                            } else if (rank == 3) {
+                                row.innerHTML = `
+                                    <td class='bronze'>${rankLabel} ${icon}<i class="fas fa-medal golden-medal T"></i><br>${player.name}</td>
+                                    <td class='bronze'>${player.gamesPlayed}</td>
+                                    <td>${efficiency.toFixed(2)}%</td>
+                                `;
+                            } else {
+                                row.innerHTML = `
+                                    <td>${rankLabel} ${icon}<br>${player.name}</td>
+                                    <td>${player.gamesPlayed}</td>
+                                    <td>${efficiency.toFixed(2)}%</td>
+                                `;
+                            }
+                            
+                            tbody.appendChild(row);
+                        });
+                        
+                        table.style.display = "table";
+                    }
+                }
+            });
+            
+            // إخفاء نص التحميل
+            if (loadingText) {
+                loadingText.style.display = "none";
+            }
+            
+            console.log("تم تخزين التصنيفات محليًا في المتصفح.");
+        }
+    });
+});
+
+// عرض تاريخ آخر تحديث
+const now = new Date();
+const formattedDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+const lastUpdateElement = document.getElementById('lastUpdate');
+if (lastUpdateElement) {
+    lastUpdateElement.textContent = `تصنيف الشطرنج (المباريات المُلعبة) - آخر تحديث بتاريخ ${formattedDate}`;
+}
+
+// وظيفة مساعدة لإنشاء معرف فريد للعضو
+function makeID(name, idNumber) {
+    return idNumber + "-" + name.replace(/\s+/g, '-').toLowerCase();
+}
+   </script>
+</body>
+</html>

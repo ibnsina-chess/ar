@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>404 - Page Not Found</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+  .bodys{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    gap: 20px;
+
+  }
+  h1{
+    color: black ;
+    font-size: 70px;
+  }
+  p{
+    text-align: center;
+  }
+  a{
+    text-decoration: none;
+    color: black;
+  }
+    </style>
+</head>
+<body>
+  <nav>
+    <img src="https://i.ibb.co/Vwt7cPq/the-dark-knights-ibns-sina-chess-club-logo-1.png" alt="" class="logo">
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="members.html">members</a></li>
+        <li><a href="classification.html">Classification</a></li>
+        <li><a href="evolution.html">Evolution</a></li>
+        <li><a href="blog.html">blog</a></li>
+
+    </ul>
+</nav>
+      <div class="bodys">
+          <h1>404</h1>
+    <p>Oops! The page you're looking for doesn't exist.</p>
+
+    <p><a href="index.html">Go back to the homepage</a></p>
+       </div> 
+
+       <footer>
+        <div class="horizontal-div">
+             <img src="https://i.ibb.co/xr0mz7L/buil-by.png" alt="">
+            
+             <a href="https://github.com/abdelhakim-sahifa"> <i class="fa-brands fa-github"></i></a>
+        </div>
+ 
+ 
+           <ul class="footer-links">
+             <li><a href="members.html">members</a></li>
+             <li><a href="classification.html">Classification</a></li>
+             <li><a href="evolution.html">Evolution</a></li>
+             <li><a href="blog.html">blog</a></li>
+         </ul>
+         <p>&copy; 2024 THE DARK KNIGHTS IBN SINA. All rights reserved.</p>
+ 
+             
+    </footer>
+ 
+
+       <script>
+        function toggleMenu() {
+            const navLinks = document.querySelector("nav ul");
+            navLinks.classList.toggle("show");
+        }
+    </script>
+</body>
+</html>

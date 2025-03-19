@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فرسان الظلام ابن سينا - ألغاز الشطرنج</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="https://i.ibb.co/Vwt7cPq/the-dark-knights-ibns-sina-chess-club-logo-1.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+    <style>
+        .puzzle-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .puzzle-header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .puzzle-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid black;
+            padding-bottom: 10px;
+        }
+        
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .user-stats {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .stat-box {
+            padding: 5px 10px;
+            border: 1px solid black;
+            border-radius: 5px;
+            background-color: white;
+        }
+        
+        .puzzle-content {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        
+        @media (min-width: 768px) {
+            .puzzle-content {
+                flex-direction: row;
+                gap: 20px;
+            }
+        }
+        
+        .board-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .puzzle-info {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid black;
+            border-radius: 10px;
+            box-shadow: 3px 3px 0 black;
+            background-color: white;
+            margin-top: 20px;
+        }
+        
+        @media (min-width: 768px) {
+            .board-container {
+                width: 60%;
+                margin: 0;
+            }
+            
+            .puzzle-info {
+                width: 40%;
+                margin-top: 0;
+            }
+        }
+        
+        .puzzle-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        button {
+            padding: 10px;
+            background-color: white;
+            color: black;
+            border: 1px solid black;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: black;
+            color: white;
+        }
+        
+        .puzzle-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .puzzle-success {
+            background-color: rgba(0, 128, 0, 0.1);
+            color: green;
+            border: 1px solid green;
+        }
+        
+        .puzzle-error {
+            background-color: rgba(255, 0, 0, 0.1);
+            color: red;
+            border: 1px solid red;
+        }
+        
+        .puzzle-hint {
+            background-color: rgba(255, 165, 0, 0.1);
+            color: orange;
+            border: 1px solid orange;
+        }
+        
+        .tabs {
+            display: flex;
+            width: 100%;
+            border-bottom: 1px solid black;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        
+        .tab.active {
+            background-color: white;
+            border-color: black;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+            width: 100%;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .leaderboard {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .leaderboard th, .leaderboard td {
+            padding: 10px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .leaderboard th {
+            background-color: #f0f0f0;
+        }
+        
+        .rank-icon {
+            margin-left: 5px;
+        }
+        
+        .gold {
+            color: goldenrod;
+        }
+        
+        .silver {
+            color: silver;
+        }
+        
+        .bronze {
+            color: #cd7f32;
+        }
+        
+        .logout-btn {
+            margin-top: 20px;
+            align-self: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <img src="https://i.ibb.co/Vwt7cPq/the-dark-knights-ibns-sina-chess-club-logo-1.png" alt="" class="logo">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul>
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="members.html">الأعضاء</a></li>
+            <li><a href="classification.html">التصنيف</a></li>
+            <li><a href="evolution.html">التطور</a></li>
+            <li><a class="active" href="puzzles.html">الألغاز</a></li>
+        </ul>
+    </nav>
+
+    <div class="puzzle-container">
+        <div class="puzzle-header">
+            <h1>ألغاز الشطرنج اليومية</h1>
+            <div class="user-info">
+                <div class="user-profile">
+                    <div class="user-avatar" id="user-avatar"></div>
+                    <div class="user-name" id="user-name">جاري التحميل...</div>
+                </div>
+                <div class="user-stats">
+                    <div class="stat-box">
+                        تم حل: <span id="solved-count">0</span>
+                    </div>
+                    <div class="stat-box">
+                        النقاط: <span id="user-points">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="puzzles">الألغاز</div>
+            <div class="tab" data-tab="leaderboard">لوحة المتصدرين</div>
+        </div>
+
+        <div class="tab-content active" id="puzzles-tab">
+            <div class="puzzle-content">
+                <div class="board-container">
+                    <div id="board"></div>
+                </div>
+                <div class="puzzle-info">
+                    <h3>لغز #<span id="puzzle-id">001</span></h3>
+                    <p><strong>المستوى:</strong> <span id="puzzle-difficulty">سهل</span></p>
+                    <p><strong>المواضيع:</strong> <span id="puzzle-themes">كش مات، الصف الخلفي</span></p>
+                    <p id="puzzle-instruction">ابحث عن أفضل نقلة للأبيض.</p>
+                    <div class="puzzle-message" id="puzzle-message" style="display: none;"></div>
+                    <div class="puzzle-actions">
+                        <button id="hint-btn">الحصول على تلميح</button>
+                        <button id="solution-btn">عرض الحل</button>
+                        <button id="next-btn">اللغز التالي</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="leaderboard-tab">
+            <table class="leaderboard">
+                <thead>
+                    <tr>
+                        <th>المرتبة</th>
+                        <th>اللاعب</th>
+                        <th>الألغاز المحلولة</th>
+                        <th>النقاط</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- سيتم ملء بيانات لوحة المتصدرين هنا -->
+                </tbody>
+            </table>
+        </div>
+
+        <button class="logout-btn" id="logout-btn">تسجيل الخروج</button>
+    </div>
+
+    <footer>
+        <div class="horizontal-div">
+            <img src="https://i.ibb.co/xr0mz7L/buil-by.png" alt="">
+            <a href="https://github.com/abdelhakim-sahifa"> <i class="fa-brands fa-github"></i></a>
+        </div>
+        <ul class="footer-links">
+            <li><a href="members.html">الأعضاء</a></li>
+            <li><a href="classification.html">التصنيف</a></li>
+            <li><a href="evolution.html">التطور</a></li>
+            <li><a href="puzzles.html">الألغاز</a></li>
+        </ul>
+        <p>&copy; 2024 فرسان الظلام ابن سينا. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script src="puzzles.js"></script>
+    <script src="leaderboard.js"></script>
+    <script src="ui.js"></script>
+    <script>
+        function toggleMenu() {
+            const navLinks = document.querySelector("nav ul");
+            navLinks.classList.toggle("show");
+        }
+    </script>
+</body>
+</html>

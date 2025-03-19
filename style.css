@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+* {
+    font-family: "Rubik", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+*::selection {
+    background: #000;
+    color: white;
+}
+
+html {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    scrollbar-width: none;
+}
+
+body {
+    max-width: 2000px;
+    width: 98%;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+    background: white;
+margin-top: 50px;
+
+  
+}
+
+nav img {
+    width: 140px;
+}
+
+ul {
+    z-index:1;
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    padding: 0;
+    margin: 0;
+    transition: left 0.3s ease;
+}
+
+li {
+    font-size: 21px;
+    font-weight: 600;
+    padding: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: color 0.3s, background 0.3s;
+}
+
+li:hover {
+    color: white;
+    background: black;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+li:hover a {
+    color: white;
+}
+
+.main {
+    margin: 200px auto;
+    padding: 20px;
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.greeting-p {
+    text-align: center;
+}
+
+.greeting-p span {
+    margin-top: 20px;
+    color: white;
+    background-color: black;
+    padding: 5px;
+}
+
+footer {
+    background-color: #000;
+    color: white;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+}
+
+.footer-links {
+    display: flex;
+    
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+
+}
+
+.footer-links a {
+    font-family: "poppins", sans-serif;
+    font-weight: 200;
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    text-decoration :underline;
+    transition: all 0.3s ease;
+    
+}
+.footer-links a:hover{
+    color: gray;
+    transition: all 0.3s ease;
+}
+
+footer i {
+    
+    transition: all 0.3s ease;
+    color: white;
+}
+footer i:hover {
+    background-color: white;
+    color: black;
+    padding: 5px;
+    transition: all 0.3s ease;
+    border-radius: 100px;
+    
+}
+
+.horizontal-div{
+    display: flex;
+    align-items: center;
+    justify-content: center ;
+
+}
+
+
+
+.vertical-div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Sidebar Styling for Mobile */
+@media (max-width: 768px) {
+    nav {
+        position: relative;
+    }
+
+    nav ul {
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: -100%; /* Hidden by default */
+        height: 100%;
+        width: 250px;
+        background: #000;
+        gap: 20px;
+        padding: 20px;
+        box-shadow: 2px 0 6px rgba(0, 0, 0, 0.3);
+    }
+
+    ul.show {
+        left: 0; /* Show sidebar when active */
+    }
+
+    li {
+        color: white;
+        font-size: 18px;
+    }
+    a{
+        color: white;
+    }
+
+    .menu-toggle {
+        display: block;
+        cursor: pointer;
+        z-index: 1000; /* Ensures it stays on top */
+    }
+
+    .menu-toggle span {
+        display: block;
+        width: 30px;
+        height: 4px;
+        background: black;
+        margin: 5px 0;
+        transition: 0.3s;
+    }
+
+    h1{
+
+        font-size:20px;
+     
+
+    }
+    body{
+        width: 90%;
+    }
+    .main{
+        padding: 0px;
+    }
+    
+
+    footer img{
+        width: 340px;
+    }
+    footer i {
+        font-size: 15px;
+    }
+    
+    
+    .footer-links a {
+        font-size: 15px;
+        
+    }
+    
+    
+
+ 
+}

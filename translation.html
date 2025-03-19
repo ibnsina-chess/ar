@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ترجمة الأسماء - فرسان الظلام ابن سينا</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="https://i.ibb.co/Vwt7cPq/the-dark-knights-ibns-sina-chess-club-logo-1.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body>
+    <nav>
+        <img src="https://i.ibb.co/Vwt7cPq/the-dark-knights-ibns-sina-chess-club-logo-1.png" alt="" class="logo">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul>
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="members.html">الأعضاء</a></li>
+            <li><a href="classification.html">التصنيف</a></li>
+            <li><a href="evolution.html">التطور</a></li>
+            <li><a href="puzzles.html">الألغاز</a></li>
+            <li><a href="translations.html">الترجمات</a></li>
+        </ul>
+    </nav>
+
+    <div class="translation-container">
+        <h1>إدارة ترجمات الأسماء</h1>
+        
+        <div class="translation-form">
+            <h2>إضافة ترجمة جديدة</h2>
+            <div class="form-group">
+                <label for="memberSelect">اختر العضو:</label>
+                <select id="memberSelect">
+                    <option value="">--اختر العضو--</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="arabicName">الاسم بالعربية:</label>
+                <input type="text" id="arabicName" placeholder="أدخل الاسم بالعربية">
+            </div>
+            
+            <button id="saveTranslation" class="btn">حفظ الترجمة</button>
+            <div id="statusMessage" class="status-message"></div>
+        </div>
+        
+        <div class="translations-list">
+            <h2>الترجمات الحالية</h2>
+            <div id="translationsList"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="horizontal-div">
+            <img src="https://i.ibb.co/xr0mz7L/buil-by.png" alt="">
+            <a href="https://github.com/abdelhakim-sahifa"> <i class="fa-brands fa-github"></i></a>
+        </div>
+
+        <ul class="footer-links">
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="members.html">الأعضاء</a></li>
+            <li><a href="classification.html">التصنيف</a></li>
+            <li><a href="evolution.html">التطور</a></li>
+            <li><a href="puzzles.html">الألغاز</a></li>
+            <li><a href="translations.html">الترجمات</a></li>
+        </ul>
+        <p>&copy; 2024 فرسان الظلام ابن سينا. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <style>
+        .translation-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        
+        .translation-form {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .btn {
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #333;
+        }
+        
+        .status-message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background-color: #dff0d8;
+            color: #3c763d;
+            display: block;
+        }
+        
+        .status-message.error {
+            background-color: #f2dede;
+            color: #a94442;
+            display: block;
+        }
+        
+        .translations-list {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .translation-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .translation-item:last-child {
+            border-bottom: none;
+        }
+        
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+        
+        @media screen and (max-width: 600px) {
+            .translation-container {
+                padding: 10px;
+            }
+        }
+    </style>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCd9XbhKz-AYvVJtLCi2hVDBvyYsSGB89w",
+            authDomain: "chess-3596b.firebaseapp.com",
+            databaseURL: "https://chess-3596b-default-rtdb.firebaseio.com",
+            projectId: "chess-3596b",
+            storageBucket: "chess-3596b.firebasestorage.app",
+            messagingSenderId: "628293480183",
+            appId: "1:628293480183:web:ecd5f317c728cd1233edf2",
+            measurementId: "G-11H7GE4LT7"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // References to the database
+        const membersRef = database.ref('members/');
+        const translationsRef = database.ref('translations/');
+
+        // DOM Elements
+        const memberSelect = document.getElementById('memberSelect');
+        const arabicNameInput = document.getElementById('arabicName');
+        const saveButton = document.getElementById('saveTranslation');
+        const statusMessage = document.getElementById('statusMessage');
+        const translationsList = document.getElementById('translationsList');
+
+        // Fetch members and populate the select dropdown
+        function loadMembers() {
+            membersRef.once('value', (snapshot) => {
+                const data = snapshot.val();
+                
+                // Clear existing options
+                while (memberSelect.options.length > 1) {
+                    memberSelect.remove(1);
+                }
+                
+                // Add new options
+                for (const memberId in data) {
+                    if (!memberId.includes("none")) {
+                        const option = document.createElement('option');
+                        option.value = memberId;
+                        option.textContent = transformId(memberId);
+                        memberSelect.appendChild(option);
+                    }
+                }
+            });
+        }
+
+        // Transform member ID to readable name
+        function transformId(id) {
+            // Remove the leading number and hyphen
+            let parts = id.split("-").slice(1);
+            
+            // Capitalize the first letter of each part
+            let formattedStr = parts.map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+            ).join(" ");
+            
+            return formattedStr;
+        }
+
+        // Save translation to Firebase
+        saveButton.addEventListener('click', () => {
+            const memberId = memberSelect.value;
+            const arabicName = arabicNameInput.value.trim();
+            
+            if (!memberId || !arabicName) {
+                showStatus('يرجى تعبئة جميع الحقول', 'error');
+                return;
+            }
+            
+            // Save to Firebase
+            translationsRef.child(memberId).set({
+                arabicName: arabicName,
+                timestamp: Date.now()
+            }).then(() => {
+                showStatus('تم حفظ الترجمة بنجاح', 'success');
+                arabicNameInput.value = '';
+                loadTranslations();
+            }).catch((error) => {
+                showStatus('حدث خطأ: ' + error.message, 'error');
+            });
+        });
+
+        // Show status message
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Load existing translations
+        function loadTranslations() {
+            translationsList.innerHTML = '';
+            
+            translationsRef.once('value', (snapshot) => {
+                const translations = snapshot.val();
+                
+                if (!translations) {
+                    translationsList.innerHTML = '<p>لا توجد ترجمات حالياً</p>';
+                    return;
+                }
+                
+                // Reference to members to get their names
+                membersRef.once('value', (membersSnapshot) => {
+                    const members = membersSnapshot.val();
+                    
+                    for (const memberId in translations) {
+                        const translation = translations[memberId];
+                        const memberName = transformId(memberId);
+                        
+                        const translationDiv = document.createElement('div');
+                        translationDiv.className = 'translation-item';
+                        
+                        const nameSpan = document.createElement('span');
+                        nameSpan.textContent = `${memberName}: ${translation.arabicName}`;
+                        
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'delete-btn';
+                        deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+                        deleteButton.addEventListener('click', () => deleteTranslation(memberId));
+                        
+                        translationDiv.appendChild(nameSpan);
+                        translationDiv.appendChild(deleteButton);
+                        translationsList.appendChild(translationDiv);
+                    }
+                });
+            });
+        }
+
+        // Delete translation
+        function deleteTranslation(memberId) {
+            if (confirm('هل أنت متأكد من حذف هذه الترجمة؟')) {
+                translationsRef.child(memberId).remove()
+                    .then(() => {
+                        showStatus('تم حذف الترجمة بنجاح', 'success');
+                        loadTranslations();
+                    })
+                    .catch((error) => {
+                        showStatus('حدث خطأ: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        // Toggle menu for mobile view
+        function toggleMenu() {
+            const navLinks = document.querySelector("nav ul");
+            navLinks.classList.toggle("show");
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMembers();
+            loadTranslations();
+        });
+    </script>
+</body>
+</html>
